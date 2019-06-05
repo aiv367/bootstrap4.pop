@@ -1,0 +1,87 @@
+html,body{
+	margin: 0;
+	font-size: 14px;
+}
+
+.container{
+	width: 1200px;
+	margin: 0 auto;
+	position: relative;
+}
+
+.group{
+	border-bottom: 1px solid #ccc;
+	padding: 20px 0;
+}
+
+.group>.group{
+	border: none;
+	padding: 10px 0;
+	margin-bottom: 20px; 
+}
+
+.group>h1{
+	font-size: 18px;
+	color:#222;
+	margin: 0 0 20px 0;
+}
+
+.group>h2{
+	font-size: 16px;
+	color:#4e4e4e;
+	margin: 0 0 10px 0;
+	font-weight: normal;
+	font-style: italic
+}
+
+.group>p{
+	font-size: 14px;
+	color:#4e4e4e;
+	line-height: 1.2;
+}
+
+
+
+.group-column{
+	width: 100%;
+}
+
+.group-column th,
+.group-column td{
+	width: 50%;
+	vertical-align: top;
+	text-align: left;
+	padding-top: 20px;
+	font-weight: normal;
+}
+.group-column th{
+	padding-right: 20px; 
+	
+}
+
+.group-column td{
+	padding-left: 20px; 
+}
+
+
+.group h1{
+	font-size: 18px;
+	color:#222;
+	margin: 0 0 5px 0;
+}
+
+.group .info{
+	font-size: 14px;
+	color: #505050;
+	margin: 0 0 5px 0;
+}
+
+
+/* highlights.js */
+pre{
+	margin: 0;
+}
+.hljs{
+	border-radius:5px;
+	padding: 20px !important;
+}

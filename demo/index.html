@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>bootstrap4.pop Demo</title>
+
+	<link rel="stylesheet" href="libs/bootstrap-4.0.0-dist/css/bootstrap.css">
+	<link rel="stylesheet" href="../bs4.pop.css">
+
+	<script src="libs/jquery/jquery.js"></script>
+	<script src="libs/bootstrap-4.0.0-dist/js/bootstrap.js"></script>
+
+	<script src="../bs4.pop.js"></script>
+
+</head>
+<body>
+	<div class="container">
+
+		<h1>bootstrap4.pop</h1>
+		<p>下面每种方法具体参数，看 bs4.pop.js 源码吧，很清楚</p>
+
+		<div class="group">
+
+			<button class="btn btn-primary" onclick="demo_dialog()">Dialog</button>
+			<button class="btn btn-primary" onclick="bs4pop.alert('我是对话框内容', function(){ console.log('我按了确定');})">Alert</button>
+			<button class="btn btn-primary" onclick="bs4pop.confirm('你确定要退出系统吗？', function(sure){ console.log('我按了确定吗:', sure);})">Confirm</button>
+			<button class="btn btn-primary" onclick="bs4pop.prompt('你算老几？', '第捏', function(sure, value){ console.log('我算老:', value);})">Prompt</button>
+			<hr>
+			<p>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {position: 'topleft'})">Notice topleft</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {position: 'topcenter'})">Notice topcenter</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {position: 'topright'})">Notice topright</button>
+			</p>
+			<p>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {position: 'center'})">Notice center</button>
+			</p>
+			<p>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {position: 'bottomleft'})">Notice bottomleft</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {position: 'bottomcenter'})">Notice bottomcenter</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {position: 'bottomright'})">Notice bottomright</button>
+			</p>
+			<hr>
+			<p>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'primary'})">Notice primary</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'secondary'})">Notice secondary</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'success'})">Notice success</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'danger'})">Notice danger</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'warning'})">Notice warning</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'info'})">Notice info</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'light'})">Notice light</button>
+				<button class="btn btn-primary" onclick="bs4pop.notice('这个是消息内容', {type: 'dark'})">Notice dark</button>
+			</p>
+
+		</div>
+
+	</div>
+
+	<script>
+
+		function demo_dialog(){
+
+			let dia = bs4pop.dialog({
+
+				title: '对话框标题, 我还能拖拽呢',
+				content: '我是对话框内容',
+
+				closeBtn: true,
+				backdrop: 'static',
+				btns: [
+					{label: '确定',	className: 'btn-primary', onClick(cb){}},
+					{label: '取消',	className: 'btn-default', onClick(cb){}}
+				],
+				onShowStart: function(){
+					// console.log('onShowStart');
+				},
+				onShowEnd: function(){
+					// console.log('onShowEnd');
+				},
+				onHideStart: function(){
+					// console.log('onHideStart');
+				},
+				onHideEnd: function(){
+					// console.log('onHideEnd');
+				},
+				onDragStart: function(){
+					console.log('onDragStart');
+				},
+				onDragEnd: function(){
+					// console.log('onDragEnd');
+				},
+				onDrag: function(){
+					console.log('onDrag');
+				}
+
+			});
+
+			setTimeout(() => {
+				// dia.hide()
+			}, 2000);
+
+		}
+
+		function demo_alert(){
+
+		}
+
+		setTimeout(() => {
+			$('#alert').alert();
+
+			setTimeout(() => {
+				$('#alert').alert('close');
+			}, 2000);
+		}, 2000);
+
+	</script>
+
+</body>
+</html>
