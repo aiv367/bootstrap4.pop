@@ -3,6 +3,9 @@
 	position: absolute;
 }
 
+.modal-header{
+	cursor: default;
+}
 
 .alert-container{
 	position: fixed;

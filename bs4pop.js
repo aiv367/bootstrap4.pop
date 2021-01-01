@@ -1,10 +1,19 @@
-let bs4pop = {};
 
-(function(pop){
+/**
+ * 基于bootstrap4，封装的消息组件 dialog, alert, confirm, prompt, notice，支持鼠标及手势拖拽
+ * @author 大花猫花大
+ * @date 2021-01-01
+ * @version 1.1
+ * https://github.com/aiv367/bootstrap4.bs4pop
+ */
+(function () {
 
-	pop.dialog = function(opts){
+	let bs4pop = {};
 
-		opts = $.extend( true, {
+	//对话框
+	bs4pop.dialog = function (opts) {
+
+		opts = $.extend(true, {
 			id: '',//'#xxx'，对话框ID，
 			title: '',
 			content: '', //可以是 string、element，$object
@@ -22,19 +31,19 @@ let bs4pop = {};
 			btns: [], //footer按钮 [{label: 'Button',	className: 'btn-primary',onClick(cb){}}]
 			drag: true,//是否启用拖拽
 
-			onShowStart(){},
-			onShowEnd(){},
-			onHideStart(){},
-			onHideEnd(){},
-			onClose(){},
-			onDragStart(){},
-			onDragEnd(){},
-			onDrag(){}
+			onShowStart() { },
+			onShowEnd() { },
+			onHideStart() { },
+			onHideEnd() { },
+			onClose() { },
+			onDragStart() { },
+			onDragEnd() { },
+			onDrag() { }
 		}, opts);
 
 		//得到 $el
-		let $el = opts.id !== '' ? $('#'+opts.id) : undefined;
-		if(!$el || !$el.length){
+		let $el = opts.id !== '' ? $('#' + opts.id) : undefined;
+		if (!$el || !$el.length) {
 			$el = $(`
 				<div class="modal fade" tabindex="-1" role="dialog" data-backdrop="${opts.backdrop}">
 					<div class="modal-dialog ">
@@ -50,15 +59,15 @@ let bs4pop = {};
 		let $body = $el.find('.modal-body');
 
 		//创建 header
-		if(opts.closeBtn || opts.title){
+		if (opts.closeBtn || opts.title) {
 
 			let $header = $('<div class="modal-header"></div>');
 
-			if(opts.title){
+			if (opts.title) {
 				$header.append(`<h5 class="modal-title"> ${opts.title} </h5>`);
 			}
 
-			if(opts.closeBtn){
+			if (opts.closeBtn) {
 				$header.append(`
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -71,7 +80,7 @@ let bs4pop = {};
 		}
 
 		//创建 footer
-		if(opts.btns.length){
+		if (opts.btns.length) {
 
 			let $footer = $('<div class="modal-footer"></div>');
 			opts.btns.forEach(btn => {
@@ -79,20 +88,20 @@ let bs4pop = {};
 				btn = $.extend(true, {
 					label: 'Button',
 					className: 'btn-primary',
-					onClick(cb){},
+					onClick(cb) { },
 				}, btn);
 
-				let $btn = $('<button type="button" class="btn '+btn.className+' pl-5 pr-5">'+btn.label+'</button>');
+				let $btn = $('<button type="button" class="btn ' + btn.className + ' pl-5 pr-5">' + btn.label + '</button>');
 
 				$btn.on('click', evt => {
 
 					//提供手动关闭对话框的方法，以便于对话框延迟关闭
-					evt.hide = ()=>{
+					evt.hide = () => {
 						$el.modal('hide');
 					};
 
 					//如果返回不是false就自动隐藏dialog
-					if(btn.onClick(evt) !== false){
+					if (btn.onClick(evt) !== false) {
 						$el.modal('hide');
 					}
 
@@ -107,9 +116,9 @@ let bs4pop = {};
 		}
 
 		//创建内容
-		if(typeof opts.content === 'string'){
+		if (typeof opts.content === 'string') {
 			$body.html(opts.content);
-		}else if(typeof opts.content === 'object'){
+		} else if (typeof opts.content === 'object') {
 			$body.empty();
 			$(opts.content).contents().appendTo($body);//移动dom到 modal-body下
 		}
@@ -122,31 +131,34 @@ let bs4pop = {};
 		opts.isCenter && $el.find('.modal-dialog').addClass('modal-dialog-centered');//对话框屏幕居中
 
 		//绑定事件
-		opts.hideRemove && $el.on('hidden.bs.modal',  function(){
+		opts.hideRemove && $el.on('hidden.bs.modal', function () {
 			$el.modal('dispose').remove();//移除dom
 		});
+
 		$el.on('show.bs.modal', opts.onShowStart);
 		$el.on('shown.bs.modal', opts.onShowEnd);
 		$el.on('hide.bs.modal', opts.onHideStart);
 		$el.on('hidden.bs.modal', opts.onHideEnd);
-		opts.closeBtn && $el.find('.close').on('click', function(){
+
+		opts.closeBtn && $el.find('.close').on('click', function () {
+			console.log('close');
 			return opts.onClose();
 		});
 
 		//拖拽
-		if(opts.drag){
+		if (opts.drag) {
 			$el.attr('data-drag', 'drag');
 			drag({
 				el: $el.find('.modal-content'),
 				handle: $el.find('.modal-header'),
-				onDragStart(){
+				onDragStart() {
 					$el.attr('data-drag', 'draged');
 					opts.onDragStart();
 				},
-				onDragEnd(){
+				onDragEnd() {
 					opts.onDragEnd();
 				},
-				onDraging(){
+				onDraging() {
 					opts.onDrag();
 				}
 			});
@@ -163,37 +175,38 @@ let bs4pop = {};
 
 		let result = {
 			$el: $el,
-			show(){
+			show() {
 				$el.modal('show');
 			},
-			hide(){
+			hide() {
 				$el.modal('hide');
 			},
-			toggle(){
+			toggle() {
 				$el.modal('toggle');
 			},
-			destory(){
+			destory() {
 				$el.modal('dispose');
 			}
 		};
 
 		return result;
-	
+
 	};
 
-	pop.removeAll = function(){
+	//关闭全部
+	bs4pop.removeAll = function () {
 		$('[role="dialog"],.modal-backdrop').remove();
 	};
 
 	//拖拽
-	function drag(opts){
+	function drag(opts) {
 
 		opts = $.extend(true, {
 			el: '',
 			handle: '',
-			onDragStart(){},
-			onDraging(){},
-			onDragEnd(){}
+			onDragStart() { },
+			onDraging() { },
+			onDragEnd() { }
 
 		}, opts);
 
@@ -202,12 +215,10 @@ let bs4pop = {};
 		let $root = $(document);
 		let isFirstDrag = true;
 
-		$(opts.handle).on('touchstart mousedown', startEvt=>{
-
-			startEvt.preventDefault();
+		$(opts.handle).on('touchstart mousedown', startEvt => {
 
 			let pointEvt = startEvt;
-			if(startEvt.type === 'touchstart'){
+			if (startEvt.type === 'touchstart') {
 				pointEvt = startEvt.touches[0];
 			}
 
@@ -221,7 +232,7 @@ let bs4pop = {};
 			let move = moveEvt => {
 
 				let pointEvt = moveEvt;
-				if(moveEvt.type === 'touchmove'){
+				if (moveEvt.type === 'touchmove') {
 					pointEvt = moveEvt.touches[0];
 				}
 
@@ -232,10 +243,10 @@ let bs4pop = {};
 					moveY: pointEvt.pageY - startData.pageY,
 				};
 
-				if(isFirstDrag){
+				if (isFirstDrag) {
 					opts.onDragStart(startData);
 					isFirstDrag = false;
-				}else{
+				} else {
 					opts.onDraging();
 				}
 
@@ -246,7 +257,7 @@ let bs4pop = {};
 
 			};
 
-			let up = () =>{
+			let up = () => {
 				$root.off('touchmove mousemove', move);
 				$root.off('touchend mouseup', up);
 				opts.onDragEnd();
@@ -258,13 +269,8 @@ let bs4pop = {};
 
 	}
 
-})(bs4pop);
-
-
-(function(pop){
-
 	//对话框
-	pop.alert = function(content, cb, opts){
+	bs4pop.alert = function (content, cb, opts) {
 
 		let dialogOpts = $.extend(true, {
 			title: '对话框',
@@ -274,8 +280,8 @@ let bs4pop = {};
 			btns: [
 				{
 					label: '确定',
-					onClick(){
-						if(cb){
+					onClick() {
+						if (cb) {
 							return cb();
 						}
 					}
@@ -283,12 +289,12 @@ let bs4pop = {};
 			]
 		}, opts);
 
-		return pop.dialog(dialogOpts);
+		return bs4pop.dialog(dialogOpts);
 
 	};
 
 	//确认框
-	pop.confirm = function(content, cb, opts){
+	bs4pop.confirm = function (content, cb, opts) {
 
 		let dialogOpts = $.extend(true, {
 			title: '选择框',
@@ -297,17 +303,17 @@ let bs4pop = {};
 			btns: [
 				{
 					label: '确定',
-					onClick(){
-						if(cb){
+					onClick() {
+						if (cb) {
 							return cb(true);
 						}
 					}
 				},
 				{
 					label: '取消',
-					className: 'btn-default',
-					onClick(){
-						if(cb){
+					className: 'btn-secondary',
+					onClick() {
+						if (cb) {
 							return cb(false);
 						}
 					}
@@ -320,8 +326,8 @@ let bs4pop = {};
 	};
 
 	//输入框
-	pop.prompt = function(content, value, cb, opts){
-		
+	bs4pop.prompt = function (content, value, cb, opts) {
+
 		let $content = $(`
 			<div>
 				<p>${content}</p>
@@ -339,17 +345,17 @@ let bs4pop = {};
 			btns: [
 				{
 					label: '确定',
-					onClick(){
-						if(cb){
+					onClick() {
+						if (cb) {
 							return cb(true, $input.val());
 						}
 					}
 				},
 				{
 					label: '取消',
-					className: 'btn-default',
-					onClick(){
-						if(cb){
+					className: 'btn-secondary',
+					onClick() {
+						if (cb) {
 							return cb(false, $input.val());
 						}
 					}
@@ -357,14 +363,14 @@ let bs4pop = {};
 			]
 		}, opts);
 
-		return pop.dialog(dialogOpts);
+		return bs4pop.dialog(dialogOpts);
 
 	};
 
 	// 消息框
-	pop.notice = function(content, opts){
+	bs4pop.notice = function (content, opts) {
 
-		opts = $.extend( true, {
+		opts = $.extend(true, {
 
 			type: 'primary', //primary, secondary, success, danger, warning, info, light, dark
 			position: 'topcenter', //topleft, topcenter, topright, bottomleft, bottomcenter, bottonright, center,
@@ -376,8 +382,8 @@ let bs4pop = {};
 		}, opts);
 
 		// 得到容器 $container
-		let $container = $('#alert-container-'+ opts.position);
-		if(!$container.length){
+		let $container = $('#alert-container-' + opts.position);
+		if (!$container.length) {
 			$container = $('<div id="alert-container-' + opts.position + '" class="alert-container"></div>');
 			$('body').append($container);
 		}
@@ -388,7 +394,7 @@ let bs4pop = {};
 		`);
 
 		// 关闭按钮
-		if(opts.autoClose){
+		if (opts.autoClose) {
 			$el
 				.append(`
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -399,7 +405,7 @@ let bs4pop = {};
 		}
 
 		//定时关闭
-		if(opts.autoClose){
+		if (opts.autoClose) {
 
 			let t = setTimeout(() => {
 				$el.alert('close');
@@ -412,15 +418,19 @@ let bs4pop = {};
 		setTimeout(() => {
 			$el.addClass('show');
 		}, 50);
-		
+
 		return;
 
 	};
 
-})(bs4pop);
 
+	//输出
+	if (typeof module !== 'undefined' && typeof exports === 'object') {
+		module.exports = bs4pop;
+	} else if (typeof define === 'function' && (define.amd || define.cmd)) {
+		define(function () { return bs4pop; });
+	} else {
+		this.bs4pop = bs4pop;
+	}
 
-
-if( typeof module === "object" && typeof module.exports === "object" ){
-	module.exports = bs4pop
-}
+}).call(this || (typeof window !== 'undefined' ? window : global));
